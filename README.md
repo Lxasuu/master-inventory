@@ -29,11 +29,5 @@ A customized inventory management system built for **Politeknik META Industri**.
    - Default URL: `http://localhost/HTML/dist/`
    - Default Admin: `admin` / `admin123`
 
-## 🧪 Development
-
-If you need to make changes to the CSS or JS from the source template:
-- `yarn install`
-- `gulp`
-
 ---
 © 2026 Politeknik META Industri
