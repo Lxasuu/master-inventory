@@ -195,6 +195,7 @@ require_once __DIR__ . "/../partials/layout_start.php";
 
             <form action="update.php" method="POST" enctype="multipart/form-data" autocomplete="off">
               <input type="hidden" name="user_id" value="<?= (int)$user['user_id'] ?>">
+              <input type="hidden" name="public_id" value="<?= h($user['public_id']) ?>">
 
               <div class="row g-3">
                 <div class="col-md-6">
