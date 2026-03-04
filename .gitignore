@@ -1,0 +1,21 @@
+# Composer
+vendor/
+composer.lock
+
+# Laragon / Environment
+.env
+.htaccess
+
+# Zips and Backups
+*.zip
+*.rar
+backup/
+
+# IDE
+.vscode/
+.idea/
+
+# Temp
+temp_extract/
+tmp/
+*.log

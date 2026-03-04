@@ -1,0 +1,82 @@
+/* assets/css/dashboard.custom.css */
+
+/* Biar page lebih lega */
+.page-content-wrapper { padding-top: 8px; }
+
+/* Card lebih modern */
+.card {
+  border: 1px solid #eef0f7;
+  border-radius: 16px;
+  box-shadow: 0 10px 24px rgba(24, 39, 75, 0.06);
+}
+
+/* Header card */
+.card .header-title {
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+
+/* Quick summary pills lebih clean */
+.nav-pills .nav-link {
+  border-radius: 12px;
+  padding: 8px 14px;
+  font-weight: 600;
+}
+.nav-pills .nav-link:not(.active) {
+  background: #f6f8ff;
+  color: #3b5de7;
+}
+
+/* KPI kanan Quick Summary */
+.dash-info-widget {
+  background: #f6f8ff;
+  border: 1px dashed #dfe6ff;
+  border-radius: 16px;
+}
+
+/* Recent PC list item jadi “card row” */
+.recent-pc-item {
+  background: #fff;
+  border: 1px solid #eef0f7;
+  border-radius: 14px;
+  padding: 14px 14px;
+  transition: .15s ease-in-out;
+}
+.recent-pc-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(24, 39, 75, 0.07);
+}
+
+/* Badge lebih konsisten */
+.badge {
+  border-radius: 999px;
+  padding: 6px 10px;
+  font-weight: 600;
+}
+
+/* Status Overview item (so-item) dibuat lebih rapi */
+.so-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:14px 16px;
+  border:1px solid #eef0f7;
+  border-radius:16px;
+  background:#fff;
+  min-height:110px;
+}
+.so-left .title{ font-weight:800; margin-bottom:2px; }
+.so-left .desc{ font-size:12px; color:#6c757d; margin-bottom:8px; }
+.so-metrics{ display:flex; gap:12px; align-items:baseline; }
+.so-metrics .count{ font-weight:800; font-size:16px; }
+.so-metrics .pct{ font-size:12px; color:#6c757d; }
+.so-donut{ width:140px; height:110px; display:flex; align-items:center; justify-content:center; }
+.so-donut > div{ width:140px; height:110px; }
+
+/* Table lebih halus */
+.table thead.thead-light th {
+  background: #f6f8ff !important;
+  border-bottom: 0;
+}
+.table td, .table th { vertical-align: middle; }

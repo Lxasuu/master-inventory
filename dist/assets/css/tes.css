@@ -1,0 +1,311 @@
+/* ==========================================================
+   META INVENTORY - PREMIUM UI PACK (ONE FILE)
+   Paste at the VERY END of assets/css/app.min.css
+========================================================== */
+
+/* -------------------------
+   Global polish
+-------------------------- */
+:root{
+  --pri:#3b5de7;
+  --pri2:#6366f1;
+  --text:#0f172a;
+  --muted:#64748b;
+  --line:rgba(15,23,42,.08);
+  --soft:rgba(15,23,42,.06);
+  --shadow:0 16px 36px rgba(15,23,42,.06);
+}
+
+.card{ margin-bottom:24px; }
+.page-content-wrapper > .card{ margin-bottom:28px; }
+.table-responsive{ border-radius:16px; }
+
+/* -------------------------
+   Sidebar Premium + icon fix
+-------------------------- */
+.vertical-menu{
+  background:#ffffff!important;
+  border-right:1px solid var(--line);
+  box-shadow:10px 0 30px rgba(15,23,42,.04);
+}
+
+.user-sidebar{
+  padding:20px 16px;
+  background:linear-gradient(135deg,var(--pri),var(--pri2));
+  border-bottom-left-radius:18px;
+  border-bottom-right-radius:18px;
+  margin:12px;
+  box-shadow:0 18px 36px rgba(59,93,231,.18);
+}
+
+.user-sidebar .user-img img{
+  width:72px;height:72px;
+  object-fit:cover;
+  border:3px solid rgba(255,255,255,.75);
+  box-shadow:0 12px 24px rgba(15,23,42,.18);
+}
+
+.user-sidebar .user-info h5{
+  font-weight:800;
+  margin-top:14px;
+  margin-bottom:4px;
+  letter-spacing:.2px;
+}
+.user-sidebar .user-info span{ opacity:.9; }
+
+#sidebar-menu .menu-title{
+  padding:14px 18px 8px;
+  margin-top:10px;
+  font-weight:800;
+  font-size:12px;
+  letter-spacing:.12em;
+  color:rgba(15,23,42,.55);
+}
+
+#sidebar-menu ul li a{
+  display:flex!important;
+  align-items:center;
+  gap:12px;
+  margin:6px 12px;
+  padding:12px 14px;
+  border-radius:14px;
+  color:rgba(15,23,42,.78)!important;
+  font-weight:700;
+  transition:all .15s ease;
+  border:1px solid transparent;
+}
+
+#sidebar-menu ul li a i{
+  width:42px!important;
+  height:42px!important;
+  min-width:42px;
+  min-height:42px;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  font-size:22px!important;
+  line-height:1!important;
+  border-radius:14px;
+  background:rgba(59,93,231,.10);
+  color:var(--pri);
+  transition:all .15s ease;
+}
+
+/* dripicons sering kecil */
+#sidebar-menu ul li a i[class^="dripicons-"],
+#sidebar-menu ul li a i[class*=" dripicons-"]{
+  font-size:24px!important;
+}
+
+#sidebar-menu ul li a:hover{
+  background:rgba(59,93,231,.06);
+  border-color:rgba(59,93,231,.18);
+  transform:translateY(-1px);
+}
+#sidebar-menu ul li a:hover i{
+  background:rgba(59,93,231,.14);
+}
+
+#sidebar-menu ul li a.active{
+  background:linear-gradient(135deg,var(--pri),var(--pri2));
+  color:#fff!important;
+  box-shadow:0 14px 28px rgba(59,93,231,.20);
+}
+#sidebar-menu ul li a.active i{
+  background:rgba(255,255,255,.18);
+  color:#fff;
+}
+#sidebar-menu{ padding-top:8px; padding-bottom:16px; }
+
+/* -------------------------
+   Premium Card container
+-------------------------- */
+.pc-card{
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+  background:#fff;
+}
+
+/* -------------------------
+   Premium Search Bar
+-------------------------- */
+.search-premium{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:center;
+}
+
+.search-premium .form-control{
+  border-radius:14px;
+  padding:10px 12px;
+  border:1px solid rgba(15,23,42,.10);
+  box-shadow:0 8px 22px rgba(15,23,42,.04);
+}
+
+.search-premium .form-control:focus{
+  border-color:rgba(59,93,231,.35);
+  box-shadow:0 0 0 .2rem rgba(59,93,231,.12);
+}
+
+/* -------------------------
+   Premium Primary Button
+-------------------------- */
+.btn-premium{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 14px;
+  border-radius:14px;
+  font-weight:800;
+  border:1px solid rgba(59,93,231,.22);
+  background:linear-gradient(135deg,var(--pri),var(--pri2));
+  color:#fff!important;
+  box-shadow:0 12px 28px rgba(59,93,231,.22);
+  transition:transform .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+.btn-premium:hover{
+  transform:translateY(-1px);
+  box-shadow:0 16px 34px rgba(59,93,231,.28);
+  filter:brightness(1.02);
+}
+.btn-premium:active{
+  transform:translateY(0);
+  box-shadow:0 10px 22px rgba(59,93,231,.20);
+}
+.btn-premium .btn-ic{
+  width:34px;height:34px;
+  border-radius:12px;
+  background:rgba(255,255,255,.18);
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* -------------------------
+   Premium Table
+-------------------------- */
+.table-premium{
+  border:1px solid var(--line);
+  border-radius:16px;
+  overflow:hidden;
+  background:#fff;
+}
+
+.table-premium table{ margin:0; }
+
+.table-premium thead th{
+  position:sticky;
+  top:0;
+  z-index:2;
+  background:#f8fafc!important;
+  color:var(--text);
+  font-weight:800;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  border-bottom:1px solid var(--line)!important;
+}
+
+.table-premium tbody td{
+  border-color:rgba(15,23,42,.06)!important;
+  vertical-align:middle;
+  color:var(--text);
+}
+
+.table-premium tbody tr:nth-child(even){ background:#fbfdff; }
+.table-premium tbody tr:hover{ background:rgba(59,93,231,.06); }
+
+/* helper */
+.code-pill{
+  font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+  font-size:12px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid rgba(15,23,42,.10);
+  background:#fff;
+  white-space:nowrap;
+}
+.name-strong{ font-weight:800; color:var(--text); }
+.meta-small{ font-size:12px; color:var(--muted); }
+
+/* -------------------------
+   Premium Badge Soft
+-------------------------- */
+.badge-soft{
+  padding:6px 10px;
+  border-radius:999px;
+  font-weight:800;
+  font-size:12px;
+  border:1px solid transparent;
+  white-space:nowrap;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+
+.badge-soft.ok{ background:rgba(34,197,94,.12); color:#16a34a; border-color:rgba(34,197,94,.20); }
+.badge-soft.no{ background:rgba(245,158,11,.14); color:#d97706; border-color:rgba(245,158,11,.22); }
+.badge-soft.bad{ background:rgba(239,68,68,.12); color:#dc2626; border-color:rgba(239,68,68,.20); }
+.badge-soft.info{ background:rgba(59,93,231,.10); color:var(--pri); border-color:rgba(59,93,231,.18); }
+
+/* role variants (optional) */
+.badge-soft.role-admin{ background:rgba(99,102,241,.14); color:#4338ca; border-color:rgba(99,102,241,.22); }
+.badge-soft.role-pic{ background:rgba(245,158,11,.14); color:#b45309; border-color:rgba(245,158,11,.22); }
+.badge-soft.role-user{ background:rgba(148,163,184,.18); color:#334155; border-color:rgba(148,163,184,.26); }
+
+/* -------------------------
+   Premium Table Actions
+-------------------------- */
+.table-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.table-actions a{
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px solid rgba(15,23,42,.10);
+  background:#fff;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-weight:700;
+  font-size:12px;
+  color:var(--text);
+  text-decoration:none;
+  transition:.15s ease;
+}
+
+.table-actions a:hover{
+  background:rgba(59,93,231,.06);
+  border-color:rgba(59,93,231,.22);
+  color:var(--pri);
+}
+
+.table-actions a.danger:hover{
+  background:rgba(239,68,68,.08);
+  border-color:rgba(239,68,68,.22);
+  color:#dc2626;
+}
+
+/* -------------------------
+   Users Avatar premium
+-------------------------- */
+.user-avatar{
+  width:44px;height:44px;
+  border-radius:999px;
+  object-fit:cover;
+  border:2px solid rgba(255,255,255,.95);
+  box-shadow:0 10px 22px rgba(15,23,42,.12);
+}
+
+/* -------------------------
+   Tiny responsive tweaks
+-------------------------- */
+@media (max-width: 992px){
+  .search-premium .form-control{ min-width:100%!important; max-width:100%!important; }
+  .btn-premium{ width:100%; justify-content:center; }
+  .table-actions a{ width:100%; justify-content:center; }
+}
