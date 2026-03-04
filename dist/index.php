@@ -1017,45 +1017,6 @@ require_once __DIR__ . "/partials/app_context.php";
         <script src="assets/libs/simplebar/simplebar.min.js"></script>
         <script src="assets/libs/node-waves/waves.min.js"></script>
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".js-read-all-notif").forEach(function (btn) {
-                btn.addEventListener("click", async function (e) {
-                e.preventDefault();
-
-                try {
-                    const res = await fetch("notification/read_all_ajax.php", {
-                    method: "POST",
-                    headers: { "X-Requested-With": "XMLHttpRequest" }
-                    });
-
-                    const data = await res.json();
-
-                    if (!data.ok) {
-                    console.error(data);
-                    return;
-                    }
-
-                    const bellBtn = document.getElementById("page-header-notifications-dropdown");
-                    if (bellBtn) {
-                    const badge = bellBtn.querySelector(".badge.bg-danger.rounded-pill");
-                    if (badge) badge.remove();
-                    }
-
-                    document.querySelectorAll(".dropdown-menu .notification-item").forEach(function (item) {
-                    item.classList.remove("bg-light"); // kamu pakai bg-light utk unread
-                    const newBadge = item.querySelector(".badge.bg-danger.mt-1");
-                    if (newBadge) newBadge.remove();
-                    });
-
-                } catch (err) {
-                    console.error(err);
-                }
-                });
-            });
-            });
-        </script>
-
         <!-- apexcharts -->
         <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
 

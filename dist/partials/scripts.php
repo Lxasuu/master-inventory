@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
           if (newBadge) newBadge.remove();
         });
       } catch (err) {
-        console.error(err);
+        console.error("Read all notifications failed:", err);
       }
     });
   });

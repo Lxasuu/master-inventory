@@ -14,7 +14,8 @@ CREATE TABLE users (
     is_active TINYINT(1) DEFAULT 1,
     photo VARCHAR(255),
     last_login_at TIMESTAMP NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE locations (
@@ -59,6 +60,8 @@ CREATE TABLE applications (
 CREATE TABLE pc_applications (
     pc_id INT,
     app_id INT,
+    installed TINYINT(1) DEFAULT 1,
+    installed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (pc_id, app_id),
     FOREIGN KEY (pc_id) REFERENCES pcs(pc_id) ON DELETE CASCADE,
     FOREIGN KEY (app_id) REFERENCES applications(app_id) ON DELETE CASCADE
@@ -68,6 +71,10 @@ CREATE TABLE pc_updates (
     update_id INT AUTO_INCREMENT PRIMARY KEY,
     pc_id INT,
     updated_by INT,
+    condition_id INT,
+    check_status_id INT,
+    internet TINYINT(1),
+    is_ready TINYINT(1),
     change_note TEXT,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (pc_id) REFERENCES pcs(pc_id) ON DELETE CASCADE

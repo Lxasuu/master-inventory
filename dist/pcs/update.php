@@ -3,9 +3,6 @@ require_once __DIR__ . "/../partials/bootstrap.php";
 require_role(['admin','pic']);
 require_once __DIR__ . "/../help_log/activity_log.php";
 $actorId = (int)($_SESSION["user"]["user_id"] ?? 0);
-
-
-$actorId = (int)($_SESSION["user"]["user_id"] ?? 0);
 if ($actorId <= 0) die("Session login tidak ditemukan. Silakan login ulang.");
 
 function splitApps(string $apps): array {

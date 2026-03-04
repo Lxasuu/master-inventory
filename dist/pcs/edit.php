@@ -15,29 +15,6 @@ if ($id <= 0) {
 // ambil context global (user + notif + photo + base_url)
 require_once __DIR__ . "/../partials/app_context.php";
 
-// photo
-$photoDb = $dbUser["photo"] ?? "";
-$photo = $photoDb
-  ? $BASE_URL . ltrim($photoDb, "/")
-  : $BASE_URL . "assets/images/users/default-avatar.png";
-
-// =========================
-// NOTIFICATIONS (activity_logs)
-// =========================
-$stmt = $pdo->prepare("SELECT COUNT(*) FROM activity_logs WHERE user_id = ? AND is_read = 0");
-$stmt->execute([$userId]);
-$notifUnread = (int)$stmt->fetchColumn();
-
-$stmt = $pdo->prepare("
-  SELECT log_id, action, entity, entity_id, title, detail, is_read, created_at
-  FROM activity_logs
-  WHERE user_id = ?
-  ORDER BY log_id DESC
-  LIMIT 5
-");
-$stmt->execute([$userId]);
-$notifications = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 // =======================
 // DATA PC
 // =======================

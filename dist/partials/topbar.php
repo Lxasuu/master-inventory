@@ -176,3 +176,36 @@ $notifications = $notifications ?? [];
                 </div>
                 </div>
             </header>
+
+            <!-- Notification JS -->
+            <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                document.querySelectorAll(".js-read-all-notif").forEach(function (btn) {
+                    btn.addEventListener("click", async function (e) {
+                        e.preventDefault();
+                        try {
+                            const res = await fetch("/HTML/dist/notification/read_all_ajax.php", {
+                                method: "POST",
+                                headers: { "X-Requested-With": "XMLHttpRequest" }
+                            });
+                            const data = await res.json();
+                            if (!data.ok) return;
+
+                            const bellBtn = document.getElementById("page-header-notifications-dropdown");
+                            if (bellBtn) {
+                                const badge = bellBtn.querySelector(".badge.bg-danger.rounded-pill");
+                                if (badge) badge.remove();
+                            }
+
+                            document.querySelectorAll(".dropdown-menu .notification-item").forEach(function (item) {
+                                item.classList.remove("bg-light");
+                                const newBadge = item.querySelector(".badge.bg-danger.mt-1");
+                                if (newBadge) newBadge.remove();
+                            });
+                        } catch (err) {
+                            console.error("Read all notifications failed:", err);
+                        }
+                    });
+                });
+            });
+            </script>

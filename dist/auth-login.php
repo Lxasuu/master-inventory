@@ -51,8 +51,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 "role"      => $user["role"],
             ];
 
-            $upd = $pdo->prepare("UPDATE users SET last_login_at = NOW() WHERE user_id = ?");
-            $upd->execute([(int)$user["user_id"]]);
+            try {
+                $upd = $pdo->prepare("UPDATE users SET last_login_at = CURRENT_TIMESTAMP WHERE user_id = ?");
+                $upd->execute([(int)$user["user_id"]]);
+            } catch (PDOException $e) {
+                error_log("Last login update failed: " . $e->getMessage());
+            }
 
             header("Location: index.php");
             exit;

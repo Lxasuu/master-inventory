@@ -8,23 +8,6 @@ $pageTitle = "Detail PC";
 require_once __DIR__ . "/../partials/app_context.php";
 
 // =========================
-// NOTIFICATIONS
-// =========================
-$stmt = $pdo->prepare("SELECT COUNT(*) FROM activity_logs WHERE user_id = ? AND is_read = 0");
-$stmt->execute([$userId]);
-$notifUnread = (int)$stmt->fetchColumn();
-
-$stmt = $pdo->prepare("
-  SELECT log_id, action, entity, entity_id, title, detail, is_read, created_at
-  FROM activity_logs
-  WHERE user_id = ?
-  ORDER BY log_id DESC
-  LIMIT 5
-");
-$stmt->execute([$userId]);
-$notifications = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// =========================
 // GET ID + FETCH PC
 // =========================
 $id = (int)($_GET['id'] ?? 0);
