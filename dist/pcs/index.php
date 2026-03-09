@@ -249,10 +249,21 @@ $pcs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
 
                 <?php if (can(['pic','admin'])): ?>
-                  <a href="create.php" class="btn btn-primary btn-addpc">
-                    <span class="btn-addpc-ic"><i class="mdi mdi-plus"></i></span>
-                    <span>Tambahkan PC</span>
-                  </a>
+                  <div class="d-flex gap-2 w-100 justify-content-end">
+                    <button type="button" class="btn btn-danger btn-addpc" id="btnBulkDeletePc" style="display:none;">
+                      <span class="btn-addpc-ic"><i class="mdi mdi-delete-outline"></i></span>
+                      <span>Hapus Terpilih (<span id="bulkDeleteCountPc">0</span>)</span>
+                    </button>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-success btn-addpc" data-bs-toggle="modal" data-bs-target="#importExcelModal">
+                      <span class="btn-addpc-ic"><i class="mdi mdi-file-excel"></i></span>
+                      <span>Import Excel</span>
+                    </button>
+                    <a href="create.php" class="btn btn-primary btn-addpc">
+                      <span class="btn-addpc-ic"><i class="mdi mdi-plus"></i></span>
+                      <span>Tambahkan PC</span>
+                    </a>
+                  </div>
                 <?php endif; ?>
               </div>
             </div>
@@ -273,6 +284,11 @@ $pcs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                     <thead>
                       <tr>
+                        <?php if (can(['pic','admin'])): ?>
+                        <th style="width: 40px; text-align:center;">
+                           <input type="checkbox" id="checkAllPc" class="form-check-input" style="cursor:pointer;">
+                        </th>
+                        <?php endif; ?>
                         <th style="width:70px;">ID</th>
                         <th style="min-width:220px;">Kode</th>
                         <th style="min-width:220px;">Nama</th>
@@ -302,8 +318,12 @@ $pcs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         if (in_array($st, ['unchecked','belum dicek'])) $stClass = 'no';
                       ?>
                       <tr>
+                        <?php if (can(['pic','admin'])): ?>
+                        <td style="text-align:center; vertical-align:middle;">
+                           <input type="checkbox" class="form-check-input checkItemPc" value="<?= (int)$pc['pc_id'] ?>" style="cursor:pointer;">
+                        </td>
+                        <?php endif; ?>
                         <td class="name-strong"><?= (int)$pc['pc_id'] ?></td>
-
                         <td><span class="code-pill"><?= htmlspecialchars($pc['unique_code'] ?? '-') ?></span></td>
 
                         <td>
@@ -391,6 +411,40 @@ $pcs = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
     </footer>
 
+  </div>
+</div>
+
+<!-- Modal Import Excel -->
+<div class="modal fade" id="importExcelModal" tabindex="-1" aria-labelledby="importExcelModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="importExcelModalLabel">Import Data PC dari Excel</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="import_excel.php" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars(csrf_token()) ?>">
+        <div class="modal-body">
+          <div class="mb-3">
+            <p class="text-muted font-size-13 mb-3">
+              Gunakan fitur ini untuk menambahkan banyak data PC sekaligus.<br>
+              Download template Excel di bawah ini, isi data sesuai format, lalu upload kembali.
+            </p>
+            <a href="download_template.php" class="btn btn-sm btn-outline-info mb-3">
+              <i class="mdi mdi-download me-1"></i> Download Template Excel
+            </a>
+          </div>
+          <div class="mb-3">
+            <label for="excelFile" class="form-label">Upload File Excel (.xlsx, .xls, .csv)</label>
+            <input class="form-control" type="file" id="excelFile" name="excelFile" accept=".xlsx, .xls, .csv" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-success" id="btnImportSubmit">Import Data</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
 
@@ -553,6 +607,109 @@ $(document).ready(function () {
       { orderable: false, targets: [8] }
     ]
   }).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
+
+  // Bulk Delete UI Logic
+  const $checkAll = $('#checkAllPc');
+  const $btnBulkDelete = $('#btnBulkDeletePc');
+  const $bulkCount = $('#bulkDeleteCountPc');
+
+  function updateBulkDeleteBtn() {
+    const checkedCount = $('.checkItemPc:checked').length;
+    if (checkedCount > 0) {
+      $bulkCount.text(checkedCount);
+      $btnBulkDelete.fadeIn(200);
+    } else {
+      $btnBulkDelete.fadeOut(200);
+    }
+  }
+
+  // Checkbox interactions
+  $checkAll.on('change', function() {
+    $('.checkItemPc').prop('checked', this.checked);
+    updateBulkDeleteBtn();
+  });
+
+  $('#datatable-buttons tbody').on('change', '.checkItemPc', function() {
+    if (!this.checked) {
+      $checkAll.prop('checked', false);
+    } else if ($('.checkItemPc:checked').length === $('.checkItemPc').length) {
+      $checkAll.prop('checked', true);
+    }
+    updateBulkDeleteBtn();
+  });
+
+  // Handle pagination/search issues with master checkbox
+  $('#datatable-buttons').DataTable().on('draw', function() {
+    $checkAll.prop('checked', false);
+    $('.checkItemPc').prop('checked', false);
+    updateBulkDeleteBtn();
+  });
+
+  // Bulk Delete Action
+  $btnBulkDelete.on('click', function() {
+    const checkedIds = [];
+    $('.checkItemPc:checked').each(function() {
+      checkedIds.push($(this).val());
+    });
+
+    if (checkedIds.length === 0) return;
+
+    Swal.fire({
+      icon: 'warning',
+      title: 'Hapus Banyak Data',
+      html: `Apakah Anda yakin ingin menghapus <b>${checkedIds.length}</b> data PC yang dipilih?<br><small class="text-danger">Tindakan ini permanen!</small>`,
+      showCancelButton: true,
+      confirmButtonColor: '#e74c3c',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Ya, Hapus Semua!',
+      cancelButtonText: 'Batal',
+      showLoaderOnConfirm: true,
+      preConfirm: async () => {
+        try {
+          const formData = new FormData();
+          formData.append('ids', JSON.stringify(checkedIds));
+          formData.append('csrf_token', CSRF_TOKEN);
+
+          const res = await fetch("delete_bulk_ajax.php", {
+            method: "POST",
+            body: formData
+          });
+
+          const data = await res.json();
+          if (!data.ok) {
+            Swal.showValidationMessage(data.message || "Gagal menghapus data.");
+            return false;
+          }
+          return data;
+        } catch (err) {
+          Swal.showValidationMessage("Terjadi kesalahan koneksi.");
+          return false;
+        }
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const table = $("#datatable-buttons").DataTable();
+        // Hapus row data table secara visual
+        $('.checkItemPc:checked').each(function() {
+          const row = $(this).closest('tr');
+          table.row(row).remove();
+        });
+        table.draw(false);
+        $checkAll.prop('checked', false);
+        updateBulkDeleteBtn();
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil',
+          text: result.value.message || `${checkedIds.length} Data PC berhasil dihapus.`,
+          timer: 1500,
+          showConfirmButton: false
+        });
+      }
+    });
+
+  });
+
 });
 </script>
 

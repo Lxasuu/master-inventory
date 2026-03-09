@@ -281,10 +281,16 @@ function avatar_url(array $row): string {
                     <div class="pc-actionbar-sub">Kelola data pengguna.</div>
                   </div>
                     <?php if (can(['pic','admin'])): ?>
-                    <a href="create.php" class="btn btn-primary btn-addpc">
-                      <span class="btn-addpc-ic"><i class="mdi mdi-plus"></i></span>
-                      <span>Tambahkan Pengguna</span>
-                    </a>
+                    <div class="d-flex gap-2 w-100 justify-content-end">
+                      <button type="button" class="btn btn-danger btn-addpc" id="btnBulkDeleteUser" style="display:none;">
+                        <span class="btn-addpc-ic"><i class="mdi mdi-delete-outline"></i></span>
+                        <span>Hapus Terpilih (<span id="bulkDeleteCountUser">0</span>)</span>
+                      </button>
+                      <a href="create.php" class="btn btn-primary btn-addpc">
+                        <span class="btn-addpc-ic"><i class="mdi mdi-plus"></i></span>
+                        <span>Tambahkan Pengguna</span>
+                      </a>
+                    </div>
                     <?php endif; ?>
                 </div>
               </div>
@@ -300,6 +306,11 @@ function avatar_url(array $row): string {
 
       <thead>
         <tr>
+          <?php if (can(['admin'])): ?>
+          <th style="width:40px; text-align:center;">
+             <input type="checkbox" id="checkAllUser" class="form-check-input" style="cursor:pointer;">
+          </th>
+          <?php endif; ?>
           <th style="width:70px;">ID</th>
           <th style="width:150px;">Nama Pengguna</th>
           <th>Email</th>
@@ -316,6 +327,15 @@ function avatar_url(array $row): string {
       <?php foreach ($users as $u): ?>
         <?php $active = ((int)$u["is_active"] === 1); ?>
         <tr>
+          <?php if (can(['admin'])): ?>
+          <td style="text-align:center; vertical-align:middle;">
+             <?php if ((int)$u['user_id'] !== $userId): ?>
+                <input type="checkbox" class="form-check-input checkItemUser" value="<?= (int)$u['user_id'] ?>" style="cursor:pointer;">
+             <?php else: ?>
+                <input type="checkbox" class="form-check-input" disabled title="Anda tidak dapat menghapus diri sendiri">
+             <?php endif; ?>
+          </td>
+          <?php endif; ?>
           <td><?= (int)$u["user_id"] ?></td>
           <td><span class="fw-semibold"><?= htmlspecialchars($u["username"]) ?></span></td>
           <td><?= htmlspecialchars($u["email"]) ?></td>
@@ -642,6 +662,108 @@ function confirmDeleteAjax(userId, dtRow) {
     });
   });
 }
+});
+
+// Bulk Delete UI Logic Users
+const $checkAll = $('#checkAllUser');
+const $btnBulkDelete = $('#btnBulkDeleteUser');
+const $bulkCount = $('#bulkDeleteCountUser');
+
+function updateBulkDeleteBtn() {
+  const checkedCount = $('.checkItemUser:checked').length;
+  if (checkedCount > 0) {
+    $bulkCount.text(checkedCount);
+    $btnBulkDelete.fadeIn(200);
+  } else {
+    $btnBulkDelete.fadeOut(200);
+  }
+}
+
+$checkAll.on('change', function() {
+  $('.checkItemUser').prop('checked', this.checked);
+  updateBulkDeleteBtn();
+});
+
+$('#datatable-buttons tbody').on('change', '.checkItemUser', function() {
+  if (!this.checked) {
+    $checkAll.prop('checked', false);
+  } else if ($('.checkItemUser:checked').length === $('.checkItemUser').length) {
+    $checkAll.prop('checked', true);
+  }
+  updateBulkDeleteBtn();
+});
+
+// Remove checks when paginating or sorting
+$('#datatable-buttons').DataTable().on('draw', function() {
+  $checkAll.prop('checked', false);
+  $('.checkItemUser').prop('checked', false);
+  updateBulkDeleteBtn();
+});
+
+// Bulk Delete Action
+$btnBulkDelete.on('click', function() {
+  const checkedIds = [];
+  $('.checkItemUser:checked').each(function() {
+    checkedIds.push($(this).val());
+  });
+
+  if (checkedIds.length === 0) return;
+
+  Swal.fire({
+    icon: 'warning',
+    title: 'Hapus Banyak Data Pengguna',
+    html: `Apakah Anda yakin ingin menghapus <b>${checkedIds.length}</b> pengguna yang dipilih?<br><small class="text-danger">Tindakan ini permanen!</small>`,
+    showCancelButton: true,
+    confirmButtonColor: '#e74c3c',
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Ya, Hapus Semua!',
+    cancelButtonText: 'Batal',
+    showLoaderOnConfirm: true,
+    preConfirm: async () => {
+      try {
+        const formData = new FormData();
+        formData.append('ids', JSON.stringify(checkedIds));
+
+        const res = await fetch("delete_bulk_ajax.php", {
+          method: "POST",
+          body: formData
+        });
+
+        const data = await res.json();
+        if (!data.ok) {
+          Swal.showValidationMessage(data.message || "Gagal menghapus pengguna.");
+          return false;
+        }
+        return data;
+      } catch (err) {
+        Swal.showValidationMessage("Terjadi kesalahan koneksi.");
+        return false;
+      }
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const table = $("#datatable-buttons").DataTable();
+      
+      $('.checkItemUser:checked').each(function() {
+        const row = $(this).closest('tr');
+        table.row(row).remove();
+      });
+      
+      table.draw(false);
+      $checkAll.prop('checked', false);
+      updateBulkDeleteBtn();
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Berhasil',
+        text: result.value.message || `${checkedIds.length} Pengguna berhasil dihapus.`,
+        timer: 1500,
+        showConfirmButton: false
+      });
+    }
+  });
+});
+
 </script>
 
 
