@@ -67,17 +67,26 @@ document.addEventListener("DOMContentLoaded", function () {
         const data = await res.json();
         if (!data.ok) return;
 
+        // 1. Hapus badge angka di bell icon
         const bellBtn = document.getElementById("page-header-notifications-dropdown");
         if (bellBtn) {
           const badge = bellBtn.querySelector(".badge.bg-danger.rounded-pill");
           if (badge) badge.remove();
         }
 
+        // 2. Hapus highlight & badge "New" dari tiap item
         document.querySelectorAll(".dropdown-menu .notification-item").forEach(function (item) {
           item.classList.remove("bg-light");
           const newBadge = item.querySelector(".badge.bg-danger.mt-1");
           if (newBadge) newBadge.remove();
         });
+
+        // 3. Ganti isi list dengan pesan kosong
+        const notifList = document.querySelector("[data-simplebar]");
+        if (notifList) {
+          notifList.innerHTML = '<div class="p-3 text-muted text-center" style="font-size:13px;"><i class="mdi mdi-bell-off-outline d-block mb-1" style="font-size:24px;opacity:.4;"></i>Semua notifikasi telah dibaca.</div>';
+        }
+
       } catch (err) {
         console.error("Read all notifications failed:", err);
       }

@@ -197,11 +197,18 @@ $notifications = $notifications ?? [];
                                 if (badge) badge.remove();
                             }
 
+                            // Hapus highlight & badge "New" dari tiap item
                             document.querySelectorAll(".dropdown-menu .notification-item").forEach(function (item) {
                                 item.classList.remove("bg-light");
                                 const newBadge = item.querySelector(".badge.bg-danger.mt-1");
                                 if (newBadge) newBadge.remove();
                             });
+
+                            // Ganti isi notif list dengan pesan kosong
+                            const notifList = document.querySelector("[data-simplebar]");
+                            if (notifList) {
+                                notifList.innerHTML = '<div class="p-3 text-muted text-center" style="font-size:13px;"><i class="mdi mdi-bell-off-outline d-block mb-1" style="font-size:24px;opacity:.4;"></i>Semua notifikasi telah dibaca.</div>';
+                            }
                         } catch (err) {
                             console.error("Read all notifications failed:", err);
                         }
