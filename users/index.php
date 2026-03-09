@@ -13,7 +13,7 @@ $email    = $sessionUser["email"] ?? "";
 $fullName = $sessionUser["full_name"] ?? $email;
 $role     = $sessionUser["role"] ?? "User";
 
-$BASE_URL = "/HTML/dist/";
+$BASE_URL = "/HTML/";
 
 // validasi aktif
 $stmt = $pdo->prepare("SELECT email, full_name, role, is_active, photo FROM users WHERE user_id = ? LIMIT 1");
@@ -51,7 +51,7 @@ $users = $pdo->query("
 
 
 function avatar_url(array $row): string {
-  $BASE_URL = "/HTML/dist/";
+  $BASE_URL = "/HTML/";
   $DEFAULT  = $BASE_URL . "assets/images/default-avatar.png"; 
 
   $photoDb = $row["photo"] ?? "";
@@ -103,8 +103,8 @@ function avatar_url(array $row): string {
   height: 100%;
 }
 #datatable-buttons td.avatar-cell img.avatar-img {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
   background-color: #f1f3f5;
@@ -112,59 +112,46 @@ function avatar_url(array $row): string {
   box-shadow: 0 2px 6px rgba(0,0,0,.08);
 }
 
-/* layout flexible: jangan fixed + ellipsis, biar header/tulisan gak ketutup */
-#datatable-buttons{
-  width:100% !important;
+/* Tabel tidak overflow, kolom adaptif */
+#datatable-buttons {
+  width: 100% !important;
+  table-layout: auto !important;
 }
 #datatable-buttons th,
-#datatable-buttons td{
+#datatable-buttons td {
   vertical-align: middle;
   white-space: nowrap;
 }
 
-/* kolom ID */
-#datatable-buttons th:nth-child(1),
-#datatable-buttons td:nth-child(1){
-  width: 70px !important;
-  text-align: center;
+/* Kolom Email dan Nama Lengkap boleh wrap agar tidak terpotong */
+#datatable-buttons td:nth-child(4),
+#datatable-buttons th:nth-child(4),
+#datatable-buttons td:nth-child(5),
+#datatable-buttons th:nth-child(5) {
+  white-space: normal;
+  min-width: 130px;
 }
 
-/* kolom Avatar */
-#datatable-buttons th:nth-child(7),
-#datatable-buttons td:nth-child(7){
-  width: 90px !important;
-  min-width: 90px !important;
+/* Kolom Aksi */
+#datatable-buttons th:last-child,
+#datatable-buttons td:last-child {
   text-align: center;
-}
-
-/* kolom Login Terakhir */
-#datatable-buttons th:nth-child(8),
-#datatable-buttons td:nth-child(8){
-  width: 180px !important;
-  min-width: 180px !important;
-}
-
-/* kolom AKSI biar muat 3 tombol */
-#datatable-buttons th:nth-child(9),
-#datatable-buttons td:nth-child(9){
-  width: 260px !important;
-  min-width: 260px !important;
-  text-align: center;
+  min-width: 200px;
 }
 
 /* tombol aksi jangan wrap */
-#datatable-buttons td:nth-child(9) .btn{
+#datatable-buttons td:last-child .btn {
   white-space: nowrap;
 }
 
 /* rapikan action bar */
-.pc-actionbar .card-body{ padding: 16px 18px; }
-.pc-actionbar-inner{ display:flex; align-items:center; justify-content:space-between; gap: 14px; }
-.pc-actionbar-title{ font-weight: 800; font-size: 16px; line-height: 1.1; }
-.pc-actionbar-sub{ font-size: 12.5px; color: #6c757d; margin-top: 4px; }
+.pc-actionbar .card-body { padding: 16px 18px; }
+.pc-actionbar-inner { display:flex; align-items:center; justify-content:space-between; gap: 14px; }
+.pc-actionbar-title { font-weight: 800; font-size: 16px; line-height: 1.1; }
+.pc-actionbar-sub { font-size: 12.5px; color: #6c757d; margin-top: 4px; }
 
 /* Tombol Add */
-.btn-addpc{
+.btn-addpc {
   height: 46px;
   border-radius: 16px;
   padding: 0 16px 0 10px;
@@ -174,7 +161,7 @@ function avatar_url(array $row): string {
   font-weight: 700;
   box-shadow: 0 14px 28px rgba(0,0,0,.08);
 }
-.btn-addpc-ic{
+.btn-addpc-ic {
   width: 34px;
   height: 34px;
   border-radius: 12px;
@@ -183,9 +170,9 @@ function avatar_url(array $row): string {
   justify-content:center;
   background: rgba(255,255,255,.22);
 }
-@media (max-width: 768px){
-  .pc-actionbar-inner{ flex-direction: column; align-items: stretch; }
-  .btn-addpc{ width: 100%; justify-content:center; }
+@media (max-width: 768px) {
+  .pc-actionbar-inner { flex-direction: column; align-items: stretch; }
+  .btn-addpc { width: 100%; justify-content:center; }
 }
 </style>
 
@@ -311,15 +298,15 @@ function avatar_url(array $row): string {
              <input type="checkbox" id="checkAllUser" class="form-check-input" style="cursor:pointer;">
           </th>
           <?php endif; ?>
-          <th style="width:70px;">ID</th>
-          <th style="width:150px;">Nama Pengguna</th>
-          <th>Email</th>
-          <th>Nama Lengkap</th>
-          <th style="width:120px;">Role</th>
-          <th style="width:110px;">Status</th>
-          <th style="width:90px; text-align:center;">Avatar</th>
-          <th style="width:180px;">Login Terakhir</th>
-          <th style="width:260px; text-align:center;">Aksi</th>
+          <th style="width:60px;">ID</th>
+          <th style="min-width:120px;">Nama Pengguna</th>
+          <th style="min-width:160px;">Email</th>
+          <th style="min-width:140px;">Nama Lengkap</th>
+          <th style="width:100px;">Role</th>
+          <th style="width:100px;">Status</th>
+          <th style="width:80px; text-align:center;">Avatar</th>
+          <th style="min-width:160px;">Login Terakhir</th>
+          <th style="width:210px; text-align:center;">Aksi</th>
         </tr>
       </thead>
 

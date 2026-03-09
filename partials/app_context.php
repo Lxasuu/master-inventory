@@ -1,7 +1,7 @@
 <?php
 // Wajib: $pdo sudah ada dari bootstrap.php dan session sudah jalan
 
-$BASE_URL = "/HTML/dist/";
+$BASE_URL = "/HTML/";
 
 $sessionUser = $_SESSION["user"] ?? [];
 $userId   = (int)($sessionUser["user_id"] ?? 0);

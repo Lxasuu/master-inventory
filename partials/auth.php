@@ -6,7 +6,7 @@ require_once __DIR__ . "/../config/db.php";
  * BASE URL untuk project (URL, bukan path Windows)
  * Sesuaikan kalau root kamu beda.
  */
-$BASE_URL = "/HTML/dist/";
+$BASE_URL = "/HTML/";
 
 // Kalau belum login, lempar ke halaman login
 if (!isset($_SESSION["user"]["user_id"])) {
@@ -50,7 +50,7 @@ $photoDb = $dbUser["photo"] ?? "";
 
 // Cek file fisik di server
 // Jika DB menyimpan "assets/images/users/abc.png" -> path fisik:
-// DOCUMENT_ROOT + "/HTML/dist/" + "assets/images/users/abc.png"
+// DOCUMENT_ROOT + "/HTML/" + "assets/images/users/abc.png"
 $photoPath = $_SERVER['DOCUMENT_ROOT'] . $BASE_URL . ltrim($photoDb, "/");
 
 if (!empty($photoDb) && file_exists($photoPath)) {

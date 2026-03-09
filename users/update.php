@@ -2,7 +2,7 @@
   require_once __DIR__ . "/../partials/bootstrap.php";
   require_role(['admin']);
 
-  $BASE_URL = "/HTML/dist/";
+  $BASE_URL = "/HTML/";
 
   if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: " . $BASE_URL . "users/index.php");

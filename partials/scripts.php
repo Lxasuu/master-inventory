@@ -19,7 +19,7 @@ $pcByLocation = $pcByLocation ?? [];
 ?>
 
 
-<?php $BASE_URL = $BASE_URL ?? '/HTML/dist/'; ?>
+<?php $BASE_URL = $BASE_URL ?? '/HTML/'; ?>
 
 <script src="<?= $BASE_URL ?>assets/libs/jquery/jquery.min.js"></script>
 <script src="<?= $BASE_URL ?>assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
       e.preventDefault();
 
       try {
-        const res = await fetch("/HTML/dist/notification/read_all_ajax.php", {
+        const res = await fetch("/HTML/notification/read_all_ajax.php", {
           method: "POST",
           headers: { "X-Requested-With": "XMLHttpRequest" }
         });

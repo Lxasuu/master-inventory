@@ -1,7 +1,7 @@
 <?php
 // partials/head.php
 $pageTitle = $pageTitle ?? 'App';
-$BASE_URL = $BASE_URL ?? '/HTML/dist/';
+$BASE_URL = $BASE_URL ?? '/HTML/';
 ?>
 <head>
   <meta charset="utf-8" />

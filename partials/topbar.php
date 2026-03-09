@@ -31,8 +31,8 @@ $notifications = $notifications ?? [];
                     <div class="navbar-brand-box d-flex align-items-center gap-2">
 
                     <!-- Logo -->
-                    <a href="/HTML/dist/index.php" class="topbar-logo-wrap d-flex align-items-center">
-                        <img src="/HTML/dist/assets/images/logo-meta copy.png"
+                    <a href="/HTML/index.php" class="topbar-logo-wrap d-flex align-items-center">
+                        <img src="/HTML/assets/images/logo-meta copy.png"
                             alt="Meta Inventory"
                             class="topbar-logo-img">
                         
@@ -100,7 +100,7 @@ $notifications = $notifications ?? [];
                                         $link = "javascript:void(0)";
                                         if ($n['entity'] === 'pcs' && !empty($n['entity_id'])) {
                                         $target = "pcs/edit.php?id=" . (int)$n['entity_id'];
-                                        $link = "/HTML/dist/notification/read.php?id=".(int)$n['log_id']."&to=".urlencode($target);
+                                        $link = "/HTML/notification/read.php?id=".(int)$n['log_id']."&to=".urlencode($target);
 
                                         }
 
@@ -163,12 +163,12 @@ $notifications = $notifications ?? [];
 
                     <div class="dropdown-menu dropdown-menu-end">
                     <!-- item-->
-                        <a class="dropdown-item" href="/HTML/dist/profile/profile.php"><i class="mdi mdi-account-circle-outline font-size-16 align-middle me-1"></i> Profil</a>
+                        <a class="dropdown-item" href="/HTML/profile/profile.php"><i class="mdi mdi-account-circle-outline font-size-16 align-middle me-1"></i> Profil</a>
                         <!-- <a class="dropdown-item" href="#"><i class="mdi mdi-wallet-outline font-size-16 align-middle me-1"></i> My Wallet</a> -->
-                         <a class="dropdown-item d-block" href="/HTML/dist/profile/profile.php"><span class="badge badge-success float-end">11</span><i class="mdi mdi-cog-outline font-size-16 align-middle me-1"></i> Pengaturan</a>
+                         <a class="dropdown-item d-block" href="/HTML/profile/profile.php"><span class="badge badge-success float-end">11</span><i class="mdi mdi-cog-outline font-size-16 align-middle me-1"></i> Pengaturan</a>
                          <!-- <a class="dropdown-item" href="#"><i class="mdi mdi-lock-open-outline font-size-16 align-middle me-1"></i> Lock screen</a> -->
                         <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="/HTML/dist/logout.php">
+                            <a class="dropdown-item text-danger" href="/HTML/logout.php">
                                 <i class="mdi mdi-power font-size-16 align-middle me-1 text-danger"></i> Keluar
                             </a>
                         </div>
@@ -184,7 +184,7 @@ $notifications = $notifications ?? [];
                     btn.addEventListener("click", async function (e) {
                         e.preventDefault();
                         try {
-                            const res = await fetch("/HTML/dist/notification/read_all_ajax.php", {
+                            const res = await fetch("/HTML/notification/read_all_ajax.php", {
                                 method: "POST",
                                 headers: { "X-Requested-With": "XMLHttpRequest" }
                             });

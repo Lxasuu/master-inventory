@@ -4,14 +4,13 @@ function e($str) {
 }
 
 function url($path) {
-  return "/HTML/dist/" . ltrim($path, "/");
+  return "/HTML/" . ltrim($path, "/");
 }
 
 function get_user_photo($photoDb) {
-    global $BASE_URL;
-    $base = $BASE_URL ?? "/HTML/dist/";
     if (!$photoDb) {
-        return $base . "assets/images/default-avatar.png";
+        return "/HTML/assets/images/default-avatar.png";
     }
-    return $base . ltrim($photoDb, "/");
+    // If it's a full path starting with uploads/, prefix with /HTML/
+    return "/HTML/" . ltrim($photoDb, "/");
 }

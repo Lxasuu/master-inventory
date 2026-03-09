@@ -3,10 +3,10 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 
 /**
  * Sesuaikan jika path folder kamu berubah.
- * Kalau aksesnya: http://inventory_meta.test/HTML/dist/
- * maka BASE_URL = "/HTML/dist/"
+ * Kalau aksesnya: http://inventory_meta.test/HTML/
+ * maka BASE_URL = "/HTML/"
  */
-$BASE_URL = "/HTML/dist/";
+$BASE_URL = "/HTML/";
 
 require_once __DIR__ . "/../config/db.php";
 require_once __DIR__ . "/helpers.php";

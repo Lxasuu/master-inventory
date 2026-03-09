@@ -66,9 +66,90 @@ if (in_array($st, ['unchecked','belum dicek'])) $stClass = 'no';
   <link href="../assets/css/app.custom.css" rel="stylesheet">
 
   <style>
-    .detail-label{ font-size:12px; color:#6c757d; margin-bottom:6px; }
-    .detail-value{ font-size:15px; font-weight:600; }
-    .detail-box{ border:1px solid #eef0f4; border-radius:14px; padding:14px; }
+    /* ─── View PC ─── */
+    .view-hero {
+      background: linear-gradient(135deg, #3f60e4 0%, #6d47d9 100%);
+      border-radius: 20px 20px 0 0;
+      padding: 36px 32px 28px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+    .view-hero-icon {
+      width: 110px;
+      height: 110px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.15);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,.25);
+      box-shadow: 0 8px 32px rgba(0,0,0,.18);
+    }
+    .view-hero-icon svg { width: 62px; height: 62px; }
+    .view-hero-title { font-size: 24px; font-weight: 800; line-height: 1.2; }
+    .view-hero-sub {
+      font-size: 13px;
+      opacity: .75;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .view-hero-sub .code-pill {
+      background: rgba(255,255,255,.2);
+      border-radius: 6px;
+      padding: 2px 10px;
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .status-chips { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    .status-chip {
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(255,255,255,.2);
+      border: 1px solid rgba(255,255,255,.3);
+    }
+    .status-chip.ok { background: rgba(39,174,96,.35); border-color: rgba(39,174,96,.5); }
+    .status-chip.bad { background: rgba(235,77,77,.35); border-color: rgba(235,77,77,.4); }
+    .status-chip.no { background: rgba(130,130,130,.3); border-color: rgba(130,130,130,.4); }
+
+    .view-body { padding: 28px 28px 22px; }
+    .detail-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+    .detail-card {
+      border: 1px solid #eef0f7;
+      border-radius: 14px;
+      padding: 14px 16px;
+      background: #fafbff;
+    }
+    .detail-card .label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: #9399aa;
+      margin-bottom: 6px;
+    }
+    .detail-card .value {
+      font-size: 15px;
+      font-weight: 700;
+      color: #2d3a56;
+    }
+    .detail-card .value .badge-soft { font-size: 13px; }
+
+    .info-note {
+      background: linear-gradient(90deg,#eef4ff,#f3eeff);
+      border-left: 4px solid #3f60e4;
+      border-radius: 0 12px 12px 0;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #4a5568;
+    }
   </style>
 </head>
 
@@ -85,7 +166,7 @@ if (in_array($st, ['unchecked','belum dicek'])) $stClass = 'no';
 
                     <!-- Logo -->
                     <a href="index.php" class="topbar-logo-wrap d-flex align-items-center">
-                        <img src="/HTML/dist/assets/images/logo-meta copy.png"
+                        <img src="/HTML/assets/images/logo-meta copy.png"
                             alt="Meta Inventory"
                             class="topbar-logo-img">
                         
@@ -212,9 +293,9 @@ if (in_array($st, ['unchecked','belum dicek'])) $stClass = 'no';
 
                     <div class="dropdown-menu dropdown-menu-end">
                     <!-- item-->
-                      <a class="dropdown-item" href="/HTML/dist/profile/profile.php"><i class="mdi mdi-account-circle-outline font-size-16 align-middle me-1"></i> Profil</a>
+                      <a class="dropdown-item" href="/HTML/profile/profile.php"><i class="mdi mdi-account-circle-outline font-size-16 align-middle me-1"></i> Profil</a>
                         <!-- <a class="dropdown-item" href="#"><i class="mdi mdi-wallet-outline font-size-16 align-middle me-1"></i> My Wallet</a> -->
-                      <a class="dropdown-item d-block" href="/HTML/dist/profile/profile.php"><span class="badge badge-success float-end">11</span><i class="mdi mdi-cog-outline font-size-16 align-middle me-1"></i> Pengaturan</a>
+                      <a class="dropdown-item d-block" href="/HTML/profile/profile.php"><span class="badge badge-success float-end">11</span><i class="mdi mdi-cog-outline font-size-16 align-middle me-1"></i> Pengaturan</a>
                          <!-- <a class="dropdown-item" href="#"><i class="mdi mdi-lock-open-outline font-size-16 align-middle me-1"></i> Lock screen</a> -->
                         <div class="dropdown-divider"></div>
                             <a class="dropdown-item text-danger" href="../logout.php">
@@ -313,93 +394,112 @@ if (in_array($st, ['unchecked','belum dicek'])) $stClass = 'no';
       <div class="container-fluid">
         <div class="page-content-wrapper">
 
-          <div class="card pc-card">
-            <div class="card-body">
-              <div class="d-flex align-items-start justify-content-between mb-3">
-                <div>
-                  <h4 class="mb-1"><?= htmlspecialchars($pc['unique_name'] ?? '-') ?></h4>
-                  <div class="meta-small"><?= htmlspecialchars($pc['unique_code'] ?? '-') ?></div>
-                </div>
+          <div class="card pc-card" style="border-radius:20px; overflow:hidden; box-shadow:0 12px 40px rgba(63,96,228,.12);">
+
+            <!-- HERO BANNER -->
+            <div class="view-hero">
+              <!-- Illustrasi PC -->
+              <div class="view-hero-icon">
+                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Monitor -->
+                  <rect x="6" y="6" width="52" height="36" rx="5" fill="rgba(255,255,255,0.25)" stroke="white" stroke-width="2.5"/>
+                  <!-- Screen -->
+                  <rect x="11" y="11" width="42" height="26" rx="3" fill="rgba(255,255,255,0.15)"/>
+                  <!-- Status dot -->
+                  <circle cx="32" cy="24" r="7" fill="rgba(255,255,255,0.45)"/>
+                  <path d="M29 24l2.5 2.5 4-4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <!-- Neck -->
+                  <rect x="28" y="42" width="8" height="6" rx="2" fill="rgba(255,255,255,0.3)"/>
+                  <!-- Base -->
+                  <rect x="22" y="48" width="20" height="4" rx="2" fill="rgba(255,255,255,0.3)"/>
+                </svg>
               </div>
 
-              <div class="row g-3">
-                <div class="col-md-4">
-                  <div class="detail-box">
-                    <div class="detail-label">Kode</div>
-                    <div class="detail-value"><?= htmlspecialchars($pc['unique_code'] ?? '-') ?></div>
-                  </div>
+              <!-- Info singkat -->
+              <div class="flex-grow-1">
+                <div class="view-hero-title"><?= htmlspecialchars($pc['unique_name'] ?: ($pc['unique_code'] ?? 'PC Detail')) ?></div>
+                <div class="view-hero-sub">
+                  <span class="code-pill"><?= htmlspecialchars($pc['unique_code'] ?? '-') ?></span>
+                  <span><i class="mdi mdi-map-marker-outline"></i> <?= htmlspecialchars($pc['location_name'] ?? '-') ?></span>
                 </div>
 
-                <div class="col-md-4">
-                  <div class="detail-box">
-                    <div class="detail-label">Nama</div>
-                    <div class="detail-value"><?= htmlspecialchars($pc['unique_name'] ?? '-') ?></div>
-                  </div>
+                <!-- status chips -->
+                <div class="status-chips">
+                  <span class="status-chip <?= $readyOk ? 'ok' : 'bad' ?>">
+                    <i class="mdi <?= $readyOk ? 'mdi-check-circle-outline' : 'mdi-close-circle-outline' ?>"></i>
+                    <?= $readyOk ? 'Ready' : 'Not Ready' ?>
+                  </span>
+                  <span class="status-chip <?= $internetOk ? 'ok' : 'no' ?>">
+                    <i class="mdi <?= $internetOk ? 'mdi-wifi' : 'mdi-wifi-off' ?>"></i>
+                    Internet <?= $internetOk ? 'OK' : 'Off' ?>
+                  </span>
+                  <span class="status-chip <?= $condClass ?>">
+                    <i class="mdi mdi-shield-check-outline"></i>
+                    <?= htmlspecialchars($pc['condition_name'] ?? '-') ?>
+                  </span>
                 </div>
-
-                <div class="col-md-4">
-                  <div class="detail-box">
-                    <div class="detail-label">Lokasi</div>
-                    <div class="detail-value"><?= htmlspecialchars($pc['location_name'] ?? '-') ?></div>
-                  </div>
-                </div>
-
-                <div class="col-md-4">
-                  <div class="detail-box">
-                    <div class="detail-label">Kondisi</div>
-                    <div class="detail-value">
-                      <span class="badge-soft <?= $condClass ?>">
-                        <?= htmlspecialchars($pc['condition_name'] ?? '-') ?>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-4">
-                  <div class="detail-box">
-                    <div class="detail-label">Status Pengecekan</div>
-                    <div class="detail-value">
-                      <span class="badge-soft <?= $stClass ?>">
-                        <?= htmlspecialchars($pc['status_name'] ?? '-') ?>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-4">
-                  <div class="detail-box">
-                    <div class="detail-label">Internet</div>
-                    <div class="detail-value">
-                      <span class="badge-soft <?= $internetOk ? 'ok' : 'no' ?>">
-                        <?= $internetOk ? 'Yes' : 'No' ?>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-4">
-                  <div class="detail-box">
-                    <div class="detail-label">Readiness</div>
-                    <div class="detail-value">
-                      <span class="badge-soft <?= $readyOk ? 'ok' : 'bad' ?>">
-                        <?= $readyOk ? 'Ready' : 'Not Ready' ?>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="col-md-8">
-                  <div class="detail-box">
-                    <div class="detail-label">Info</div>
-                    <div class="text-muted" style="font-size:13px;">
-                      Halaman ini hanya untuk melihat detail data PC tanpa edit.
-                    </div>
-                  </div>
-                </div>
-
               </div>
-
             </div>
+
+            <!-- DETAIL BODY -->
+            <div class="view-body">
+              <div class="detail-grid">
+
+                <div class="detail-card">
+                  <div class="label"><i class="mdi mdi-barcode"></i> Kode</div>
+                  <div class="value"><?= htmlspecialchars($pc['unique_code'] ?? '-') ?></div>
+                </div>
+
+                <div class="detail-card">
+                  <div class="label"><i class="mdi mdi-tag-text-outline"></i> Nama</div>
+                  <div class="value"><?= htmlspecialchars($pc['unique_name'] ?? '-') ?></div>
+                </div>
+
+                <div class="detail-card">
+                  <div class="label"><i class="mdi mdi-map-marker-outline"></i> Lokasi</div>
+                  <div class="value"><?= htmlspecialchars($pc['location_name'] ?? '-') ?></div>
+                </div>
+
+                <div class="detail-card">
+                  <div class="label"><i class="mdi mdi-shield-check-outline"></i> Kondisi</div>
+                  <div class="value">
+                    <span class="badge-soft <?= $condClass ?>"><?= htmlspecialchars($pc['condition_name'] ?? '-') ?></span>
+                  </div>
+                </div>
+
+                <div class="detail-card">
+                  <div class="label"><i class="mdi mdi-clipboard-check-outline"></i> Status Pengecekan</div>
+                  <div class="value">
+                    <span class="badge-soft <?= $stClass ?>"><?= htmlspecialchars($pc['status_name'] ?? '-') ?></span>
+                  </div>
+                </div>
+
+                <div class="detail-card">
+                  <div class="label"><i class="mdi mdi-wifi"></i> Internet</div>
+                  <div class="value">
+                    <span class="badge-soft <?= $internetOk ? 'ok' : 'no' ?>"><?= $internetOk ? 'Yes' : 'No' ?></span>
+                  </div>
+                </div>
+
+                <div class="detail-card">
+                  <div class="label"><i class="mdi mdi-check-decagram-outline"></i> Readiness</div>
+                  <div class="value">
+                    <span class="badge-soft <?= $readyOk ? 'ok' : 'bad' ?>"><?= $readyOk ? 'Ready' : 'Not Ready' ?></span>
+                  </div>
+                </div>
+
+                <div class="detail-card" style="grid-column: 1 / -1;">
+                  <div class="label"><i class="mdi mdi-information-outline"></i> Info</div>
+                  <div class="info-note">
+                    <i class="mdi mdi-eye-outline me-1"></i>
+                    Halaman ini hanya untuk melihat detail data PC. Gunakan tombol <b>Edit</b> di atas untuk mengubah data.
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <!-- END BODY -->
+
           </div>
 
         </div>

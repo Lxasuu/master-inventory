@@ -1,7 +1,7 @@
 <?php
 // dist/partials/sidebar.php
 
-$BASE_URL  = $BASE_URL ?? "/HTML/dist/";
+$BASE_URL  = $BASE_URL ?? "/HTML/";
 
 $fullName  = $fullName ?? ($_SESSION['user']['full_name'] ?? 'User');
 $role      = $role ?? ($_SESSION['user']['role'] ?? 'User');
