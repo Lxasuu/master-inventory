@@ -84,5 +84,15 @@ try {
 
 } catch (Exception $e) {
   $pdo->rollBack();
-  echo json_encode(['ok' => false, 'message' => 'Gagal menghapus pengguna: ' . $e->getMessage()]);
+  error_log("DELETE_BULK_USER FAILED: " . $e->getMessage());
+
+  // Deteksi foreign key constraint violation
+  $code = $e->getCode();
+  if ($code === '23000' || $code === 23000 || str_contains($e->getMessage(), 'foreign key constraint')) {
+    $msg = '❌ Gagal menghapus pengguna karena tidak bisa menghapus pengguna ini (admin).';
+  } else {
+    $msg = 'Terjadi kesalahan saat menghapus data. Silakan coba lagi.';
+  }
+
+  echo json_encode(['ok' => false, 'message' => $msg]);
 }

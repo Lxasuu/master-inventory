@@ -11,7 +11,7 @@ session_start();
 require_once __DIR__ . "/config/db.php";
 
 // composer autoload (vendor ada di HTML/, sedangkan file ini di HTML/dist/)
-require_once __DIR__ . "/../vendor/autoload.php";
+require_once __DIR__ . "/vendor/autoload.php";
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;

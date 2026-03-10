@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../partials/bootstrap.php';
 require_once __DIR__ . '/../partials/csrf.php';
 require_role(['pic', 'admin']);
-require __DIR__ . '/../../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 

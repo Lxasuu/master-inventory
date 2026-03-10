@@ -68,90 +68,103 @@ $pcs = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <link href="../assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 
   <style>
-    /* table fixed */
-    #datatable-buttons{
-      width:100% !important;
-      table-layout: fixed !important;
-    }
-    #datatable-buttons th,
-    #datatable-buttons td{
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      vertical-align: middle;
-    }
-    #datatable-buttons th:nth-child(1),
-    #datatable-buttons td:nth-child(1){
-      width:70px !important;
-      min-width:70px !important;
-      max-width:70px !important;
-    }
-    #datatable-buttons th:nth-child(9),
-    #datatable-buttons td:nth-child(9){
-      width:190px !important;
-      min-width:190px !important;
-      max-width:190px !important;
-      text-align:center;
-    }
-
-    /* ===== Action bar atas (tanpa search) ===== */
-  .pc-actionbar .card-body{
-    padding: 16px 18px;
+  /* === COMPACT TABLE === */
+  #datatable-buttons {
+    width: 100% !important;
+    table-layout: fixed !important;
+    font-size: 13px;
+  }
+  #datatable-buttons th,
+  #datatable-buttons td {
+    vertical-align: middle;
+    padding: 8px 8px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #datatable-buttons td:last-child,
+  #datatable-buttons th:last-child {
+    text-align: center;
+    overflow: visible;
   }
 
-  .pc-actionbar-inner{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+  /* Tombol aksi icon-only */
+  .btn-act {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    font-size: 15px;
+    transition: transform .12s, opacity .12s;
+  }
+  .btn-act:hover { transform: scale(1.12); opacity: .9; }
+
+  /* === ACTIONBAR HEADER === */
+  .pc-actionbar .card-body { padding: 20px 24px; }
+  .pc-actionbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .pc-actionbar-left {
+    display: flex;
+    align-items: center;
     gap: 14px;
   }
-
-  .pc-actionbar-title{
-    font-weight: 800;
-    font-size: 16px;
-    line-height: 1.1;
+  .pc-actionbar-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #2ecc71 0%, #1a9e5c 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 22px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 14px rgba(46,204,113,.35);
+  }
+  .pc-actionbar-title {
+    font-weight: 700;
+    font-size: 15px;
+    color: #2d3748;
+    line-height: 1.2;
+    margin: 0;
+  }
+  .pc-actionbar-sub {
+    font-size: 12px;
+    color: #a0aec0;
+    margin-top: 2px;
   }
 
-  .pc-actionbar-sub{
-    font-size: 12.5px;
-    color: #6c757d;
-    margin-top: 4px;
-  }
-
-  /* Tombol Add PC rapih & “nyatu” */
-  .btn-addpc{
+  /* Tombol Add */
+  .btn-addpc {
     height: 46px;
     border-radius: 16px;
     padding: 0 16px 0 10px;
-    display:flex;
-    align-items:center;
-    gap:10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-weight: 700;
     box-shadow: 0 14px 28px rgba(0,0,0,.08);
   }
-
-  .btn-addpc-ic{
+  .btn-addpc-ic {
     width: 34px;
     height: 34px;
     border-radius: 12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: rgba(255,255,255,.22);
   }
-
-  /* Responsive */
-  @media (max-width: 768px){
-    .pc-actionbar-inner{
-      flex-direction: column;
-      align-items: stretch;
-    }
-    .btn-addpc{
-      width: 100%;
-      justify-content:center;
-    }
+  @media (max-width: 768px) {
+    .pc-actionbar-inner { flex-direction: column; align-items: stretch; }
+    .btn-addpc { width: 100%; justify-content: center; }
   }
-
   </style>
 
   
@@ -244,8 +257,13 @@ $pcs = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="card-body">
               <div class="pc-actionbar-inner">
                 <div class="pc-actionbar-left">
-                  <div class="pc-actionbar-title">Data PC</div>
-                  <div class="pc-actionbar-sub">Kelola data PC dan monitoring status.</div>
+                  <div class="pc-actionbar-icon">
+                    <i class="mdi mdi-desktop-classic"></i>
+                  </div>
+                  <div class="pc-actionbar-text">
+                    <div class="pc-actionbar-title">Data PC</div>
+                    <div class="pc-actionbar-sub">Kelola inventaris dan status seluruh unit PC</div>
+                  </div>
                 </div>
 
                 <?php if (can(['pic','admin'])): ?>
@@ -279,7 +297,7 @@ $pcs = $stmt->fetchAll(PDO::FETCH_ASSOC);
               <div class="table-premium">
                 <div class="table-responsive">
                   <table id="datatable-buttons"
-                    class="table table-bordered dt-responsive nowrap"
+                    class="table table-bordered nowrap"
                     style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 
                     <thead>
@@ -289,15 +307,15 @@ $pcs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                            <input type="checkbox" id="checkAllPc" class="form-check-input" style="cursor:pointer;">
                         </th>
                         <?php endif; ?>
-                        <th style="width:70px;">ID</th>
-                        <th style="min-width:220px;">Kode</th>
-                        <th style="min-width:220px;">Nama</th>
-                        <th style="width:140px;">Lokasi</th>
-                        <th style="width:140px;">Kondisi</th>
-                        <th style="width:140px;">Status</th>
-                        <th style="width:110px;">Internet</th>
-                        <th style="width:120px;">Ready</th>
-                        <th style="width:190px;">Aksi</th>
+                        <th style="width:36px; text-align:center;">ID</th>
+                        <th style="width:120px;">Kode</th>
+                        <th style="width:140px;">Nama PC</th>
+                        <th style="width:110px;">Lokasi</th>
+                        <th style="width:90px;">Kondisi</th>
+                        <th style="width:100px;">Status</th>
+                        <th style="width:70px;">Internet</th>
+                        <th style="width:80px;">Ready</th>
+                        <th style="width:86px; text-align:center;">Aksi</th>
                       </tr>
                     </thead>
 
@@ -357,28 +375,34 @@ $pcs = $stmt->fetchAll(PDO::FETCH_ASSOC);
                           </span>
                         </td>
 
-                        <td class="col-aksi">
+                        <td class="col-aksi" style="overflow:visible;">
                           <?php if (can(['pic','admin'])): ?>
-                            <div class="aksi-wrap">
-                              <a class="btn btn-sm btn-info" href="view.php?id=<?= (int)$pc['pc_id'] ?>">
-                                <i class="mdi mdi-eye-outline"></i> View
+                            <div class="d-flex gap-1 justify-content-center">
+                              <a class="btn btn-sm btn-info btn-act"
+                                 href="view.php?id=<?= (int)$pc['pc_id'] ?>"
+                                 title="View" data-bs-toggle="tooltip">
+                                <i class="mdi mdi-eye-outline"></i>
                               </a>
-
-                              <a class="btn btn-sm btn-light" href="edit.php?id=<?= (int)$pc['pc_id'] ?>">
-                                <i class="mdi mdi-pencil-outline"></i> Edit
+                              <a class="btn btn-sm btn-secondary btn-act"
+                                 href="edit.php?id=<?= (int)$pc['pc_id'] ?>"
+                                 title="Edit" data-bs-toggle="tooltip">
+                                <i class="mdi mdi-pencil-outline"></i>
                               </a>
-
-                              <button type="button" class="btn btn-sm btn-danger"
-                                onclick="confirmDeletePcAjax(<?= (int)$pc['pc_id'] ?>, this)">
-                                <i class="mdi mdi-delete-outline"></i> Delete
+                              <button type="button" class="btn btn-sm btn-danger btn-act"
+                                onclick="confirmDeletePcAjax(<?= (int)$pc['pc_id'] ?>, this)"
+                                title="Delete" data-bs-toggle="tooltip">
+                                <i class="mdi mdi-delete-outline"></i>
                               </button>
                             </div>
                           <?php else: ?>
-                            <a class="btn btn-sm btn-info" href="view.php?id=<?= (int)$pc['pc_id'] ?>">
-                              <i class="mdi mdi-eye-outline"></i> View
-                            </a>
+                            <div class="d-flex gap-1 justify-content-center">
+                              <a class="btn btn-sm btn-info btn-act"
+                                 href="view.php?id=<?= (int)$pc['pc_id'] ?>"
+                                 title="View" data-bs-toggle="tooltip">
+                                <i class="mdi mdi-eye-outline"></i>
+                              </a>
+                            </div>
                           <?php endif; ?>
-                        </td>
                         </td>
                       </tr>
                     <?php endforeach; ?>
@@ -590,8 +614,7 @@ function confirmDeletePcAjax(pcId, btnEl) {
 
 <script>
 $(document).ready(function () {
-  $("#datatable-buttons").DataTable({
-    responsive: true,
+  const table = $("#datatable-buttons").DataTable({
     lengthChange: true,
     pageLength: 10,
     ordering: true,
@@ -604,9 +627,19 @@ $(document).ready(function () {
       { extend: "colvis", text: "Column visibility" }
     ],
     columnDefs: [
-      { orderable: false, targets: [8] }
+      { orderable: false, targets: [0, 8] } // Checkbox & Aksi
     ]
-  }).buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
+  });
+
+  table.buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
+
+  // Tooltip init
+  var ttEls = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  ttEls.forEach(function(el){ new bootstrap.Tooltip(el, { trigger: 'hover' }); });
+  table.on('draw', function() {
+    var tEls = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tEls.forEach(function(el){ new bootstrap.Tooltip(el, { trigger: 'hover' }); });
+  });
 
   // Bulk Delete UI Logic
   const $checkAll = $('#checkAllPc');

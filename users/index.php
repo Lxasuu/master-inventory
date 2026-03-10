@@ -112,43 +112,92 @@ function avatar_url(array $row): string {
   box-shadow: 0 2px 6px rgba(0,0,0,.08);
 }
 
-/* Tabel tidak overflow, kolom adaptif */
+/* === COMPACT TABLE === */
 #datatable-buttons {
   width: 100% !important;
-  table-layout: auto !important;
+  table-layout: fixed !important;
+  font-size: 13px;
 }
 #datatable-buttons th,
 #datatable-buttons td {
   vertical-align: middle;
+  padding: 8px 8px !important;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Kolom Email dan Nama Lengkap boleh wrap agar tidak terpotong */
-#datatable-buttons td:nth-child(4),
-#datatable-buttons th:nth-child(4),
-#datatable-buttons td:nth-child(5),
-#datatable-buttons th:nth-child(5) {
-  white-space: normal;
-  min-width: 130px;
-}
-
-/* Kolom Aksi */
-#datatable-buttons th:last-child,
-#datatable-buttons td:last-child {
+/* Avatar cell selalu rata tengah */
+#datatable-buttons td.avatar-cell {
+  overflow: visible;
   text-align: center;
-  min-width: 200px;
 }
 
-/* tombol aksi jangan wrap */
-#datatable-buttons td:last-child .btn {
-  white-space: nowrap;
+/* Kolom Aksi selalu visible, tidak dipotong */
+#datatable-buttons td:last-child,
+#datatable-buttons th:last-child {
+  text-align: center;
+  overflow: visible;
 }
 
-/* rapikan action bar */
-.pc-actionbar .card-body { padding: 16px 18px; }
-.pc-actionbar-inner { display:flex; align-items:center; justify-content:space-between; gap: 14px; }
-.pc-actionbar-title { font-weight: 800; font-size: 16px; line-height: 1.1; }
-.pc-actionbar-sub { font-size: 12.5px; color: #6c757d; margin-top: 4px; }
+/* Tombol aksi - icon only */
+.btn-act {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  font-size: 15px;
+  transition: transform .12s, opacity .12s;
+}
+.btn-act:hover {
+  transform: scale(1.12);
+  opacity: .9;
+}
+
+/* === ACTIONBAR HEADER === */
+.pc-actionbar .card-body {
+  padding: 20px 24px;
+}
+.pc-actionbar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.pc-actionbar-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.pc-actionbar-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #5b73e8 0%, #7b52d3 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 22px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(91,115,232,.35);
+}
+.pc-actionbar-text {}
+.pc-actionbar-title {
+  font-weight: 700;
+  font-size: 15px;
+  color: #2d3748;
+  line-height: 1.2;
+  margin: 0;
+}
+.pc-actionbar-sub {
+  font-size: 12px;
+  color: #a0aec0;
+  margin-top: 2px;
+}
 
 /* Tombol Add */
 .btn-addpc {
@@ -264,9 +313,14 @@ function avatar_url(array $row): string {
             <div class="card-body">
               <div class="pc-actionbar-inner">
                 <div class="pc-actionbar-left">
-                  <div class="pc-actionbar-title">Data Pengguna</div>
-                    <div class="pc-actionbar-sub">Kelola data pengguna.</div>
+                  <div class="pc-actionbar-icon">
+                    <i class="mdi mdi-account-group"></i>
                   </div>
+                  <div class="pc-actionbar-text">
+                    <div class="pc-actionbar-title">Data Pengguna</div>
+                    <div class="pc-actionbar-sub">Kelola seluruh akun pengguna sistem</div>
+                  </div>
+                </div>
                     <?php if (can(['pic','admin'])): ?>
                     <div class="d-flex gap-2 w-100 justify-content-end">
                       <button type="button" class="btn btn-danger btn-addpc" id="btnBulkDeleteUser" style="display:none;">
@@ -285,11 +339,9 @@ function avatar_url(array $row): string {
 
     <div class="table-premium">
       <div class="table-responsive">
-        <div class="table-premium">
-  <div class="table-responsive">
-    <table id="datatable-buttons"
-      class="table table-bordered nowrap"
-      style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <table id="datatable-buttons"
+          class="table table-bordered nowrap"
+          style="border-collapse: collapse; border-spacing: 0; width: 100%;">
 
       <thead>
         <tr>
@@ -298,15 +350,15 @@ function avatar_url(array $row): string {
              <input type="checkbox" id="checkAllUser" class="form-check-input" style="cursor:pointer;">
           </th>
           <?php endif; ?>
-          <th style="width:60px;">ID</th>
-          <th style="min-width:120px;">Nama Pengguna</th>
-          <th style="min-width:160px;">Email</th>
-          <th style="min-width:140px;">Nama Lengkap</th>
-          <th style="width:100px;">Role</th>
-          <th style="width:100px;">Status</th>
-          <th style="width:80px; text-align:center;">Avatar</th>
-          <th style="min-width:160px;">Login Terakhir</th>
-          <th style="width:210px; text-align:center;">Aksi</th>
+          <th style="width:36px; text-align:center;">ID</th>
+          <th style="width:100px;">Username</th>
+          <th style="width:150px;">Email</th>
+          <th style="width:130px;">Nama Lengkap</th>
+          <th style="width:65px;">Role</th>
+          <th style="width:72px;">Status</th>
+          <th style="width:52px; text-align:center;">Foto</th>
+          <th style="width:130px;">Login Terakhir</th>
+          <th style="width:96px; text-align:center;">Aksi</th>
         </tr>
       </thead>
 
@@ -342,22 +394,23 @@ function avatar_url(array $row): string {
 
           <td><?= htmlspecialchars($u["last_login_at"] ?? '-') ?></td>
 
-          <td class="text-center">
+          <td class="text-center" style="overflow:visible;">
             <div class="d-flex gap-1 justify-content-center">
-              <a class="btn btn-sm btn-info js-view"
-                 href="view.php?u=<?= htmlspecialchars($u['public_id']) ?>">
-                <i class="mdi mdi-eye-outline"></i> View
+              <a class="btn btn-sm btn-info btn-act js-view"
+                 href="view.php?u=<?= htmlspecialchars($u['public_id']) ?>"
+                 title="View" data-bs-toggle="tooltip">
+                <i class="mdi mdi-eye-outline"></i>
               </a>
-
-              <a class="btn btn-sm btn-light js-edit"
-                 href="edit.php?u=<?= htmlspecialchars($u['public_id']) ?>">
-                <i class="mdi mdi-pencil-outline"></i> Edit
+              <a class="btn btn-sm btn-secondary btn-act js-edit"
+                 href="edit.php?u=<?= htmlspecialchars($u['public_id']) ?>"
+                 title="Edit" data-bs-toggle="tooltip">
+                <i class="mdi mdi-pencil-outline"></i>
               </a>
-
               <button type="button"
-                      class="btn btn-sm btn-danger js-delete-user"
-                      data-id="<?= (int)$u['user_id'] ?>">
-                <i class="mdi mdi-delete-outline"></i> Delete
+                      class="btn btn-sm btn-danger btn-act js-delete-user"
+                      data-id="<?= (int)$u['user_id'] ?>"
+                      title="Delete" data-bs-toggle="tooltip">
+                <i class="mdi mdi-delete-outline"></i>
               </button>
             </div>
           </td>
@@ -438,15 +491,17 @@ function avatar_url(array $row): string {
 
 <script>
 
+// =============================================
+// confirmDeleteAjax — single-row delete
+// =============================================
 function confirmDeleteAjax(userId, btnEl) {
-  const userRole = "<?= htmlspecialchars(strtolower($role)) ?>"; // admin / pic / user
+  const userRole = "<?= htmlspecialchars(strtolower($role)) ?>";
 
   const titleText = (userRole === "admin") ? "Danger Alert (Admin)" : "Konfirmasi Hapus";
-  const subtitle = (userRole === "admin")
+  const subtitle  = (userRole === "admin")
     ? "Sebagai admin, kamu akan menghapus data pengguna."
     : "Kamu tidak memiliki hak admin penuh, pastikan tindakan ini benar.";
-
-  const warning = (userRole === "admin")
+  const warning   = (userRole === "admin")
     ? "Data akan dihapus permanen dan tidak bisa dikembalikan."
     : "Jika kamu tidak yakin, klik Batal.";
 
@@ -454,33 +509,15 @@ function confirmDeleteAjax(userId, btnEl) {
     icon: 'warning',
     title: `<div style="font-weight:800;font-size:22px;">${titleText}</div>`,
     html: `
-      <div style="text-align:center; margin-top:10px;">
+      <div style="text-align:center;margin-top:10px;">
         <div style="font-size:13px;color:#666;margin-bottom:6px;">${subtitle}</div>
-
-        <div style="font-size:14px;color:#444;margin-top:10px;">
-          Apakah kamu yakin ingin menghapus data ini?
-        </div>
-
-        <div style="font-size:13px;margin-top:10px;color:#d63031;font-weight:700;">
-          ${warning}
-        </div>
-
-        <div style="
-          display:flex;
-          align-items:center;
-          justify-content:center;
-          gap:8px;
-          margin-top:16px;
-          font-size:13px;
-          color:#444;
-        ">
+        <div style="font-size:14px;color:#444;margin-top:10px;">Apakah kamu yakin ingin menghapus data ini?</div>
+        <div style="font-size:13px;margin-top:10px;color:#d63031;font-weight:700;">${warning}</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;font-size:13px;color:#444;">
           <input type="checkbox" id="confirmCheck" style="cursor:pointer;">
-          <label for="confirmCheck" style="cursor:pointer;">
-            Saya mengerti dan ingin menghapus data ini
-          </label>
+          <label for="confirmCheck" style="cursor:pointer;">Saya mengerti dan ingin menghapus data ini</label>
         </div>
-      </div>
-    `,
+      </div>`,
     showCancelButton: true,
     confirmButtonText: 'Hapus Data',
     cancelButtonText: 'Batal',
@@ -489,268 +526,161 @@ function confirmDeleteAjax(userId, btnEl) {
     focusConfirm: false,
     width: 460,
     padding: '1.5rem',
-
     didOpen: () => {
-      const confirmBtn = Swal.getConfirmButton();
-      confirmBtn.disabled = true;
-      confirmBtn.style.opacity = "0.6";
-      confirmBtn.style.cursor = "not-allowed";
-
-      const checkbox = document.getElementById("confirmCheck");
-      checkbox.addEventListener("change", () => {
-        confirmBtn.disabled = !checkbox.checked;
-        confirmBtn.style.opacity = checkbox.checked ? "1" : "0.6";
-        confirmBtn.style.cursor = checkbox.checked ? "pointer" : "not-allowed";
+      const btn = Swal.getConfirmButton();
+      btn.disabled = true;
+      btn.style.opacity = '0.6';
+      btn.style.cursor  = 'not-allowed';
+      document.getElementById('confirmCheck').addEventListener('change', (e) => {
+        btn.disabled   = !e.target.checked;
+        btn.style.opacity = e.target.checked ? '1' : '0.6';
+        btn.style.cursor  = e.target.checked ? 'pointer' : 'not-allowed';
       });
     },
-
     showLoaderOnConfirm: true,
     allowOutsideClick: () => !Swal.isLoading(),
-
     preConfirm: async () => {
-      const checkbox = document.getElementById("confirmCheck");
-      if (!checkbox.checked) {
-        Swal.showValidationMessage("Silakan centang konfirmasi terlebih dahulu");
+      if (!document.getElementById('confirmCheck').checked) {
+        Swal.showValidationMessage('Silakan centang konfirmasi terlebih dahulu');
         return false;
       }
-
       try {
-        const formData = new FormData();
-        formData.append("id", userId);
-
-        const res = await fetch("delete_ajax.php", {
-          method: "POST",
-          body: formData
-        });
-
+        const fd = new FormData();
+        fd.append('id', userId);
+        const res  = await fetch('delete_ajax.php', { method: 'POST', body: fd });
         const data = await res.json();
-
-        if (!data.ok) {
-          Swal.showValidationMessage(data.message || "Gagal menghapus data.");
-          return false;
-        }
-
+        if (!data.ok) { Swal.showValidationMessage(data.message || 'Gagal menghapus data.'); return false; }
         return data;
-
-      } catch (err) {
-        Swal.showValidationMessage("Terjadi kesalahan koneksi.");
+      } catch (e) {
+        Swal.showValidationMessage('Terjadi kesalahan koneksi.');
         return false;
       }
     }
-
   }).then((result) => {
     if (!result.isConfirmed) return;
-
-    const table = $("#datatable-buttons").DataTable();
-    const row = $(btnEl).closest("tr");
-
-    table
-      .row(row)
-      .remove()
-      .draw(false);
-
-    Swal.fire({
-      icon: "success",
-      title: "Berhasil",
-      text: "Data berhasil dihapus.",
-      timer: 1400,
-      showConfirmButton: false
-    });
+    const dt  = $('#datatable-buttons').DataTable();
+    const row = $(btnEl).closest('tr');
+    dt.row(row).remove().draw(false);
+    Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Data berhasil dihapus.', timer: 1400, showConfirmButton: false });
   });
 }
-</script>
 
 
-
-<script>
+// =============================================
+// DataTable + Event Handlers
+// =============================================
 $(document).ready(function () {
 
-  const table = $("#datatable-buttons").DataTable({
-    responsive: true,
+  const table = $('#datatable-buttons').DataTable({
     lengthChange: true,
     pageLength: 10,
     ordering: true,
     searching: true,
-    dom: "Bfrtip",
+    dom: 'Bfrtip',
     buttons: [
-      { extend: "copy",  text: "Copy",  exportOptions: { columns: [1,2,3,4,5,6] } },
-      { extend: "excel", text: "Excel", exportOptions: { columns: [1,2,3,4,5,6] } },
-      { extend: "pdf",   text: "PDF",   exportOptions: { columns: [1,2,3,4,5,6] } },
-      { extend: "colvis", text: "Column visibility" }
+      { extend: 'copy',  text: 'Copy',  exportOptions: { columns: [1,2,3,4,5,6] } },
+      { extend: 'excel', text: 'Excel', exportOptions: { columns: [1,2,3,4,5,6] } },
+      { extend: 'pdf',   text: 'PDF',   exportOptions: { columns: [1,2,3,4,5,6] } },
+      { extend: 'colvis', text: 'Column visibility' }
     ],
     columnDefs: [
-      { orderable: false, targets: [6,8] } // Avatar & Aksi
+      { orderable: false, targets: [0, 7, 9] } // Checkbox, Avatar & Aksi
     ]
   });
 
-  table.buttons().container().appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
+  table.buttons().container().appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
 
-  // ✅ FIX: View/Edit selalu navigasi (page 2 aman)
-  $('#datatable-buttons tbody').on('click', 'a.js-view, a.js-edit', function(e){
+  // Init Bootstrap tooltips
+  var tooltipEls = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  tooltipEls.forEach(function (el) { new bootstrap.Tooltip(el, { trigger: 'hover' }); });
+
+  // Re-init tooltips after DataTable redraws (pagination/search)
+  table.on('draw', function () {
+    var tEls = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tEls.forEach(function (el) { new bootstrap.Tooltip(el, { trigger: 'hover' }); });
+  });
+
+  // View / Edit — navigasi langsung
+  $('#datatable-buttons tbody').on('click', 'a.js-view, a.js-edit', function (e) {
     e.preventDefault();
     e.stopPropagation();
-    const url = this.getAttribute('href');
-    if (url) window.location.assign(url);
+    window.location.assign(this.getAttribute('href'));
   });
 
-  // ✅ Delete handler (page 2 aman)
-  $('#datatable-buttons tbody').on('click', '.js-delete-user', function(){
-    const userId = $(this).data('id');
-    const tr = $(this).closest('tr');
-    const row = table.row(tr.hasClass('child') ? tr.prev() : tr);
-    confirmDeleteAjax(userId, row);
+  // Delete — panggil confirmDeleteAjax
+  $('#datatable-buttons tbody').on('click', '.js-delete-user', function () {
+    confirmDeleteAjax($(this).data('id'), this);
   });
 
-});
+  // =============================================
+  // Bulk Delete UI
+  // =============================================
+  const $checkAll  = $('#checkAllUser');
+  const $btnBulk   = $('#btnBulkDeleteUser');
+  const $bulkCount = $('#bulkDeleteCountUser');
 
-// ✅ fungsi delete (gunakan punyamu, tapi row remove pakai dtRow)
-function confirmDeleteAjax(userId, dtRow) {
-  const userRole = "<?= htmlspecialchars(strtolower($role)) ?>";
+  function updateBulkBtn() {
+    const n = $('.checkItemUser:checked').length;
+    if (n > 0) { $bulkCount.text(n); $btnBulk.fadeIn(200); }
+    else        { $btnBulk.fadeOut(200); }
+  }
 
-  Swal.fire({
-    icon: 'warning',
-    title: "Konfirmasi Hapus",
-    text: "Apakah kamu yakin ingin menghapus data ini?",
-    showCancelButton: true,
-    confirmButtonText: 'Hapus',
-    cancelButtonText: 'Batal',
-    confirmButtonColor: '#e74c3c',
-    cancelButtonColor: '#6c757d',
-    showLoaderOnConfirm: true,
-    preConfirm: async () => {
-      try {
-        const formData = new FormData();
-        formData.append("id", userId);
+  $checkAll.on('change', function () {
+    $('.checkItemUser').prop('checked', this.checked);
+    updateBulkBtn();
+  });
 
-        const res = await fetch("delete_ajax.php", { method: "POST", body: formData });
-        const data = await res.json();
+  $('#datatable-buttons tbody').on('change', '.checkItemUser', function () {
+    if (!this.checked) $checkAll.prop('checked', false);
+    else if ($('.checkItemUser:checked').length === $('.checkItemUser').length) $checkAll.prop('checked', true);
+    updateBulkBtn();
+  });
 
-        if (!data.ok) {
-          Swal.showValidationMessage(data.message || "Gagal menghapus data.");
-          return false;
-        }
-        return data;
-      } catch (e) {
-        Swal.showValidationMessage("Terjadi kesalahan koneksi.");
-        return false;
-      }
-    }
-  }).then((result) => {
-    if (!result.isConfirmed) return;
+  table.on('draw', function () {
+    $checkAll.prop('checked', false);
+    $('.checkItemUser').prop('checked', false);
+    updateBulkBtn();
+  });
 
-    dtRow.remove().draw(false);
+  $btnBulk.on('click', function () {
+    const ids = [];
+    $('.checkItemUser:checked').each(function () { ids.push($(this).val()); });
+    if (!ids.length) return;
 
     Swal.fire({
-      icon: "success",
-      title: "Berhasil",
-      text: "Data berhasil dihapus.",
-      timer: 1200,
-      showConfirmButton: false
-    });
-  });
-}
-});
-
-// Bulk Delete UI Logic Users
-const $checkAll = $('#checkAllUser');
-const $btnBulkDelete = $('#btnBulkDeleteUser');
-const $bulkCount = $('#bulkDeleteCountUser');
-
-function updateBulkDeleteBtn() {
-  const checkedCount = $('.checkItemUser:checked').length;
-  if (checkedCount > 0) {
-    $bulkCount.text(checkedCount);
-    $btnBulkDelete.fadeIn(200);
-  } else {
-    $btnBulkDelete.fadeOut(200);
-  }
-}
-
-$checkAll.on('change', function() {
-  $('.checkItemUser').prop('checked', this.checked);
-  updateBulkDeleteBtn();
-});
-
-$('#datatable-buttons tbody').on('change', '.checkItemUser', function() {
-  if (!this.checked) {
-    $checkAll.prop('checked', false);
-  } else if ($('.checkItemUser:checked').length === $('.checkItemUser').length) {
-    $checkAll.prop('checked', true);
-  }
-  updateBulkDeleteBtn();
-});
-
-// Remove checks when paginating or sorting
-$('#datatable-buttons').DataTable().on('draw', function() {
-  $checkAll.prop('checked', false);
-  $('.checkItemUser').prop('checked', false);
-  updateBulkDeleteBtn();
-});
-
-// Bulk Delete Action
-$btnBulkDelete.on('click', function() {
-  const checkedIds = [];
-  $('.checkItemUser:checked').each(function() {
-    checkedIds.push($(this).val());
-  });
-
-  if (checkedIds.length === 0) return;
-
-  Swal.fire({
-    icon: 'warning',
-    title: 'Hapus Banyak Data Pengguna',
-    html: `Apakah Anda yakin ingin menghapus <b>${checkedIds.length}</b> pengguna yang dipilih?<br><small class="text-danger">Tindakan ini permanen!</small>`,
-    showCancelButton: true,
-    confirmButtonColor: '#e74c3c',
-    cancelButtonColor: '#6c757d',
-    confirmButtonText: 'Ya, Hapus Semua!',
-    cancelButtonText: 'Batal',
-    showLoaderOnConfirm: true,
-    preConfirm: async () => {
-      try {
-        const formData = new FormData();
-        formData.append('ids', JSON.stringify(checkedIds));
-
-        const res = await fetch("delete_bulk_ajax.php", {
-          method: "POST",
-          body: formData
-        });
-
-        const data = await res.json();
-        if (!data.ok) {
-          Swal.showValidationMessage(data.message || "Gagal menghapus pengguna.");
+      icon: 'warning',
+      title: 'Hapus Banyak Data Pengguna',
+      html: `Apakah Anda yakin ingin menghapus <b>${ids.length}</b> pengguna yang dipilih?<br><small class="text-danger">Tindakan ini permanen!</small>`,
+      showCancelButton: true,
+      confirmButtonColor: '#e74c3c',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Ya, Hapus Semua!',
+      cancelButtonText: 'Batal',
+      showLoaderOnConfirm: true,
+      preConfirm: async () => {
+        try {
+          const fd = new FormData();
+          fd.append('ids', JSON.stringify(ids));
+          const res  = await fetch('delete_bulk_ajax.php', { method: 'POST', body: fd });
+          const data = await res.json();
+          if (!data.ok) { Swal.showValidationMessage(data.message || 'Gagal menghapus pengguna.'); return false; }
+          return data;
+        } catch (e) {
+          Swal.showValidationMessage('Terjadi kesalahan koneksi.');
           return false;
         }
-        return data;
-      } catch (err) {
-        Swal.showValidationMessage("Terjadi kesalahan koneksi.");
-        return false;
       }
-    }
-  }).then((result) => {
-    if (result.isConfirmed) {
-      const table = $("#datatable-buttons").DataTable();
-      
-      $('.checkItemUser:checked').each(function() {
-        const row = $(this).closest('tr');
-        table.row(row).remove();
-      });
-      
+    }).then((result) => {
+      if (!result.isConfirmed) return;
+      $('.checkItemUser:checked').each(function () { table.row($(this).closest('tr')).remove(); });
       table.draw(false);
       $checkAll.prop('checked', false);
-      updateBulkDeleteBtn();
-
-      Swal.fire({
-        icon: 'success',
-        title: 'Berhasil',
-        text: result.value.message || `${checkedIds.length} Pengguna berhasil dihapus.`,
-        timer: 1500,
-        showConfirmButton: false
-      });
-    }
+      updateBulkBtn();
+      Swal.fire({ icon: 'success', title: 'Berhasil', text: result.value.message || `${ids.length} Pengguna berhasil dihapus.`, timer: 1500, showConfirmButton: false });
+    });
   });
-});
 
+});
 </script>
 
 
